@@ -11,6 +11,19 @@ export interface InfoCardData {
   imageUrl?: string;
   phone?: string;
   website?: string;
+  // Additional fields from webhook response
+  duration?: string;
+  price?: string;
+  highlights?: string[];
+  availability?: string;
+  contact_phone?: string;
+  website_url?: string;
+  average_rating?: number;
+  rating?: number;
+  short_description?: string;
+  address?: string;
+  name?: string;
+  image?: string;
 }
 
 const SAVED_ITEMS_KEY = '@discover_diani_saved_items';

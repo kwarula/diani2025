@@ -19,12 +19,27 @@ import { VoiceInputOverlay } from '@/components/VoiceInputOverlay';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useSavedItems, InfoCardData } from '@/hooks/useSavedItems';
 
+// n8n webhook endpoint
+const WEBHOOK_URL = 'https://n8n.zaidicreatorlab.com/webhook-test/b65b3de6-506a-4c2a-86be-9bfd1c81d8ea';
+
 interface Message {
   id: string;
   text: string;
   isUser: boolean;
   timestamp: Date;
   cards?: InfoCardData[];
+}
+
+interface WebhookResponse {
+  text: string;
+  richContent?: {
+    type: string;
+    data: any;
+  };
+  suggestions?: Array<{
+    text: string;
+    query: string;
+  }>;
 }
 
 export default function ChatScreen() {
@@ -40,92 +55,14 @@ export default function ChatScreen() {
   ]);
   const [inputText, setInputText] = useState('');
   const [isListening, setIsListening] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isLoadingResponse, setIsLoadingResponse] = useState(false);
   const [inputHeight, setInputHeight] = useState(44);
   const scrollViewRef = useRef<ScrollView>(null);
   const textInputRef = useRef<TextInput>(null);
 
-  const sampleResponses: { [key: string]: { text: string; cards: InfoCardData[] } } = {
-    restaurant: {
-      text: "Here are some fantastic dining options in Diani Beach:",
-      cards: [
-        {
-          id: '1',
-          title: 'Ali Barbour\'s Cave Restaurant',
-          description: 'Unique dining experience in a natural coral cave with fresh seafood and romantic ambiance.',
-          category: 'Restaurant',
-          location: 'Diani Beach Road, Kwale',
-          imageUrl: 'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
-          phone: '+254 721 234567',
-          website: 'alibarbours.com',
-        },
-        {
-          id: '2',
-          title: 'The Sands at Nomad',
-          description: 'Beachfront dining with international cuisine and stunning ocean views.',
-          category: 'Restaurant',
-          location: 'Diani Beach',
-          imageUrl: 'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg',
-          phone: '+254 722 567890',
-          website: 'thesandsatnomad.com',
-        },
-      ]
-    },
-    hotel: {
-      text: "These luxury hotels offer the perfect Diani Beach experience:",
-      cards: [
-        {
-          id: '3',
-          title: 'Almanara Luxury Resort',
-          description: 'Exclusive beachfront resort with private villas, spa services, and pristine white sand beaches.',
-          category: 'Hotel',
-          location: 'Diani Beach',
-          imageUrl: 'https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg',
-          phone: '+254 733 123456',
-          website: 'almanara.com',
-        },
-        {
-          id: '4',
-          title: 'Swahili Beach Resort',
-          description: 'Boutique resort blending traditional Swahili architecture with modern luxury amenities.',
-          category: 'Hotel',
-          location: 'Diani Beach',
-          imageUrl: 'https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg',
-          phone: '+254 722 987654',
-          website: 'swahilibeach.com',
-        },
-      ]
-    },
-    activity: {
-      text: "Exciting activities and adventures await you in Diani:",
-      cards: [
-        {
-          id: '5',
-          title: 'Kite Surfing Adventures',
-          description: 'Professional kite surfing lessons and equipment rental with certified instructors.',
-          category: 'Activity',
-          location: 'Diani Beach',
-          imageUrl: 'https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg',
-          phone: '+254 712 345678',
-          website: 'dianikitesurf.com',
-        },
-        {
-          id: '6',
-          title: 'Colobus Conservation',
-          description: 'Visit rescued colobus monkeys and learn about wildlife conservation efforts.',
-          category: 'Activity',
-          location: 'Diani Beach Road',
-          imageUrl: 'https://images.pexels.com/photos/2295744/pexels-photo-2295744.jpeg',
-          phone: '+254 700 234567',
-          website: 'colobusconservation.org',
-        },
-      ]
-    },
-  };
-
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping]);
+  }, [messages, isLoadingResponse]);
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -133,24 +70,27 @@ export default function ChatScreen() {
     }, 100);
   };
 
-  const getResponseForQuery = (query: string) => {
-    const lowerQuery = query.toLowerCase();
-    
-    if (lowerQuery.includes('restaurant') || lowerQuery.includes('food') || lowerQuery.includes('eat') || lowerQuery.includes('dining')) {
-      return sampleResponses.restaurant;
-    } else if (lowerQuery.includes('hotel') || lowerQuery.includes('accommodation') || lowerQuery.includes('stay') || lowerQuery.includes('resort')) {
-      return sampleResponses.hotel;
-    } else if (lowerQuery.includes('activity') || lowerQuery.includes('things to do') || lowerQuery.includes('fun') || lowerQuery.includes('adventure')) {
-      return sampleResponses.activity;
-    } else {
-      return {
-        text: "I'd be happy to help you explore Diani Beach! You can ask me about restaurants, hotels, activities, local services, or anything else you'd like to know. What specifically interests you?",
-        cards: []
-      };
-    }
+  // Function to map webhook response data to InfoCardData
+  const mapToInfoCardData = (item: any, index: number): InfoCardData => {
+    return {
+      id: item.id || `item-${Date.now()}-${index}`,
+      title: item.name || item.title || 'Unknown',
+      description: item.short_description || item.category || item.description || '',
+      category: item.category || 'General',
+      location: item.address || item.location || '',
+      imageUrl: item.image || item.imageUrl || '',
+      phone: item.contact_phone || item.phone || '',
+      website: item.website_url || item.website || '',
+      // Additional fields
+      duration: item.duration,
+      price: item.price,
+      highlights: item.highlights,
+      availability: item.availability,
+      rating: item.average_rating || item.rating,
+    };
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputText.trim()) {
       const userMessage: Message = {
         id: Date.now().toString(),
@@ -163,22 +103,67 @@ export default function ChatScreen() {
       const query = inputText.trim();
       setInputText('');
       setInputHeight(44);
-      setIsTyping(true);
+      setIsLoadingResponse(true);
 
-      // Simulate AI thinking time
-      setTimeout(() => {
-        setIsTyping(false);
-        const response = getResponseForQuery(query);
+      try {
+        // Make POST request to n8n webhook
+        const response = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: query,
+            timestamp: new Date().toISOString(),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const webhookData: WebhookResponse = await response.json();
         
+        // Create AI response message
         const aiResponse: Message = {
           id: (Date.now() + 1).toString(),
-          text: response.text,
+          text: webhookData.text || "I received your message but couldn't generate a proper response. Please try asking again.",
           isUser: false,
           timestamp: new Date(),
-          cards: response.cards,
         };
+
+        // Process rich content if present
+        if (webhookData.richContent && webhookData.richContent.data) {
+          const { type, data } = webhookData.richContent;
+          
+          if (Array.isArray(data)) {
+            // Handle plural types (activities, hotels, etc.) - array of items
+            const cards = data.map((item, index) => mapToInfoCardData(item, index));
+            aiResponse.cards = cards;
+          } else if (typeof data === 'object' && data !== null) {
+            // Handle singular types (restaurant, hotel, etc.) - single object
+            const card = mapToInfoCardData(data, 0);
+            aiResponse.cards = [card];
+          }
+        }
+
         setMessages(prev => [...prev, aiResponse]);
-      }, 1500);
+
+      } catch (error) {
+        console.error('Webhook request failed:', error);
+        
+        // Add error message
+        const errorResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          text: "I'm sorry, I'm having trouble connecting to my knowledge base right now. Please check your internet connection and try again.",
+          isUser: false,
+          timestamp: new Date(),
+        };
+        
+        setMessages(prev => [...prev, errorResponse]);
+      } finally {
+        setIsLoadingResponse(false);
+      }
     }
   };
 
@@ -269,7 +254,7 @@ export default function ChatScreen() {
             </View>
           ))}
           
-          {isTyping && (
+          {isLoadingResponse && (
             <View style={styles.typingContainer}>
               <View style={styles.typingBubble}>
                 <View style={styles.typingDots}>
@@ -312,7 +297,7 @@ export default function ChatScreen() {
                 <TouchableOpacity
                   style={styles.sendButton}
                   onPress={handleSendMessage}
-                  disabled={!inputText.trim() || isTyping}
+                  disabled={!inputText.trim() || isLoadingResponse}
                   activeOpacity={0.8}>
                   <ArrowUp size={20} color="#FFFFFF" />
                 </TouchableOpacity>
