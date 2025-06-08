@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -192,37 +192,7 @@ export default function DetailsScreen() {
   const handleDirections = () => {
     if (detailData.location) {
       const query = encodeURIComponent(`${detailData.title}, ${detailData.location}`);
-      
-      if (Platform.OS === 'ios') {
-        // Try Apple Maps first, fallback to Google Maps
-        Linking.canOpenURL(`maps://app?q=${query}`)
-          .then(supported => {
-            if (supported) {
-              Linking.openURL(`maps://app?q=${query}`);
-            } else {
-              Linking.openURL(`https://maps.google.com/?q=${query}`);
-            }
-          })
-          .catch(() => {
-            Linking.openURL(`https://maps.google.com/?q=${query}`);
-          });
-      } else if (Platform.OS === 'android') {
-        // Try Google Maps app first, fallback to web
-        Linking.canOpenURL(`geo:0,0?q=${query}`)
-          .then(supported => {
-            if (supported) {
-              Linking.openURL(`geo:0,0?q=${query}`);
-            } else {
-              Linking.openURL(`https://maps.google.com/?q=${query}`);
-            }
-          })
-          .catch(() => {
-            Linking.openURL(`https://maps.google.com/?q=${query}`);
-          });
-      } else {
-        // Web platform - open Google Maps in browser
-        Linking.openURL(`https://maps.google.com/?q=${query}`);
-      }
+      Linking.openURL(`https://maps.google.com/?q=${query}`);
     }
   };
 
@@ -275,7 +245,7 @@ export default function DetailsScreen() {
 
     if (hasHalfStar) {
       stars.push(
-        <Star key="half\" size={16} color={colors.warning} fill="transparent" />
+        <Star key="half" size={16} color={colors.warning} fill="transparent" />
       );
     }
 
@@ -370,19 +340,12 @@ export default function DetailsScreen() {
             )}
           </View>
 
-          {/* Location - Now Tappable */}
+          {/* Location */}
           {detailData.location && (
-            <TouchableOpacity 
-              style={styles.locationSection} 
-              onPress={handleDirections}
-              activeOpacity={0.7}
-            >
-              <MapPin size={20} color={colors.primary} />
+            <View style={styles.locationSection}>
+              <MapPin size={20} color={colors.textSecondary} />
               <Text style={styles.locationText}>{detailData.location}</Text>
-              <View style={styles.locationHint}>
-                <Text style={styles.locationHintText}>Tap for directions</Text>
-              </View>
-            </TouchableOpacity>
+            </View>
           )}
 
           {/* Description */}
@@ -606,38 +569,17 @@ const createStyles = (colors: any) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 24,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    backgroundColor: colors.primaryLight,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    shadowColor: colors.primary,
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 4,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: colors.surfaceSecondary,
+    borderRadius: 12,
   },
   locationText: {
     fontSize: 16,
-    fontFamily: 'Roboto-Medium',
-    color: colors.primary,
+    fontFamily: 'Roboto-Regular',
+    color: colors.textSecondary,
     marginLeft: 12,
     flex: 1,
-  },
-  locationHint: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  locationHintText: {
-    fontSize: 12,
-    fontFamily: 'Roboto-Medium',
-    color: '#FFFFFF',
   },
   descriptionSection: {
     marginBottom: 32,
