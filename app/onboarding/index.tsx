@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ChevronRight } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@/contexts/ThemeContext';
 
 export default function OnboardingStart() {
@@ -14,11 +15,13 @@ export default function OnboardingStart() {
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <View style={styles.logoWrapper}>
-            <Image 
-              source={require('@/assets/images/logo.png')}
-              style={styles.logo}
-              resizeMode="contain"
-            />
+            <View style={styles.logoInnerShadow}>
+              <Image 
+                source={require('@/assets/images/logo.png')}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+            </View>
           </View>
         </View>
         
@@ -28,7 +31,13 @@ export default function OnboardingStart() {
               source={{ uri: 'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg' }}
               style={styles.heroImage}
             />
-            <View style={styles.imageOverlay} />
+            <LinearGradient
+              colors={['rgba(74, 144, 226, 0.15)', 'rgba(82, 183, 136, 0.1)', 'transparent']}
+              style={styles.imageOverlay}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            />
+            <View style={styles.imageGlow} />
           </View>
         </View>
         
@@ -46,10 +55,17 @@ export default function OnboardingStart() {
           <TouchableOpacity 
             style={styles.getStartedButton}
             onPress={() => router.push('/onboarding/welcome')}
-            activeOpacity={0.8}
+            activeOpacity={0.85}
           >
-            <Text style={styles.getStartedText}>Get Started</Text>
-            <ChevronRight size={20} color="#FFFFFF" />
+            <LinearGradient
+              colors={[colors.primary, colors.primaryDark]}
+              style={styles.buttonGradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            >
+              <Text style={styles.getStartedText}>Get Started</Text>
+              <ChevronRight size={20} color="#FFFFFF" />
+            </LinearGradient>
           </TouchableOpacity>
           
           <TouchableOpacity 
@@ -90,6 +106,24 @@ const createStyles = (colors: any) => StyleSheet.create({
     shadowColor: colors.primary,
     shadowOffset: {
       width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 16,
+    elevation: 12,
+    borderWidth: 3,
+    borderColor: colors.primaryLight,
+  },
+  logoInnerShadow: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: colors.primaryLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: colors.primary,
+    shadowOffset: {
+      width: 0,
       height: 4,
     },
     shadowOpacity: 0.15,
@@ -109,17 +143,18 @@ const createStyles = (colors: any) => StyleSheet.create({
   },
   heroImageWrapper: {
     width: '100%',
-    height: 220,
-    borderRadius: 24,
+    height: 240,
+    borderRadius: 28,
     overflow: 'hidden',
     shadowColor: colors.shadow,
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 12,
     },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 8,
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
+    elevation: 15,
+    position: 'relative',
   },
   heroImage: {
     width: '100%',
@@ -132,7 +167,17 @@ const createStyles = (colors: any) => StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(74, 144, 226, 0.1)',
+  },
+  imageGlow: {
+    position: 'absolute',
+    top: -10,
+    left: -10,
+    right: -10,
+    bottom: -10,
+    borderRadius: 38,
+    backgroundColor: colors.primary,
+    opacity: 0.1,
+    zIndex: -1,
   },
   textContent: {
     flex: 1,
@@ -140,65 +185,82 @@ const createStyles = (colors: any) => StyleSheet.create({
     paddingVertical: 32,
   },
   title: {
-    fontSize: 32,
+    fontSize: 34,
     fontFamily: 'Roboto-Bold',
     color: colors.text,
     textAlign: 'center',
-    marginBottom: 16,
-    lineHeight: 38,
+    marginBottom: 18,
+    lineHeight: 40,
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 19,
     fontFamily: 'Roboto-Medium',
     color: colors.primary,
     textAlign: 'center',
-    marginBottom: 20,
-    lineHeight: 26,
+    marginBottom: 22,
+    lineHeight: 28,
+    letterSpacing: 0.2,
   },
   description: {
     fontSize: 16,
     fontFamily: 'Roboto-Regular',
     color: colors.textSecondary,
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 26,
+    letterSpacing: 0.1,
   },
   actions: {
     paddingBottom: 40,
   },
   getStartedButton: {
-    backgroundColor: colors.primary,
-    paddingVertical: 18,
-    paddingHorizontal: 32,
-    borderRadius: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 32,
     marginBottom: 16,
     shadowColor: colors.primary,
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  buttonGradient: {
+    paddingVertical: 20,
+    paddingHorizontal: 36,
+    borderRadius: 32,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   getStartedText: {
     fontSize: 18,
     fontFamily: 'Roboto-Bold',
     color: '#FFFFFF',
     marginRight: 8,
+    letterSpacing: 0.3,
   },
   skipButton: {
     alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 24,
+    paddingVertical: 18,
+    paddingHorizontal: 28,
+    borderRadius: 26,
     backgroundColor: colors.surfaceSecondary,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    shadowColor: colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
   },
   skipText: {
     fontSize: 16,
     fontFamily: 'Roboto-Medium',
     color: colors.textSecondary,
+    letterSpacing: 0.2,
   },
 });

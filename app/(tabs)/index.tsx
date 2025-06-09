@@ -12,7 +12,8 @@ import {
   KeyboardAvoidingView,
   Image,
 } from 'react-native';
-import { Send, Mic, MicOff, ArrowUp } from 'lucide-react-native';
+import { Send, Mic, MicOff, ArrowUp, Sparkles } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { ChatBubble } from '@/components/ChatBubble';
 import { InfoCard } from '@/components/InfoCard';
 import { VoiceInputOverlay } from '@/components/VoiceInputOverlay';
@@ -206,11 +207,27 @@ export default function ChatScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Image 
-          source={require('@/assets/images/logo.png')}
-          style={styles.headerLogo}
-          resizeMode="contain"
-        />
+        <LinearGradient
+          colors={[colors.surface, colors.surfaceSecondary]}
+          style={styles.headerGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.headerContent}>
+            <View style={styles.logoContainer}>
+              <Image 
+                source={require('@/assets/images/logo.png')}
+                style={styles.headerLogo}
+                resizeMode="contain"
+              />
+              <View style={styles.logoGlow} />
+            </View>
+            <View style={styles.aiIndicator}>
+              <Sparkles size={16} color={colors.primary} />
+              <Text style={styles.aiText}>AI Assistant</Text>
+            </View>
+          </View>
+        </LinearGradient>
       </View>
 
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -228,9 +245,17 @@ export default function ChatScreen() {
                   key={index}
                   style={styles.quickQuestionButton}
                   onPress={() => handleQuickQuestion(question)}
-                  activeOpacity={0.8}
+                  activeOpacity={0.85}
                 >
-                  <Text style={styles.quickQuestionText}>{question}</Text>
+                  <LinearGradient
+                    colors={[colors.primaryLight, colors.surface]}
+                    style={styles.quickQuestionGradient}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                  >
+                    <Text style={styles.quickQuestionText}>{question}</Text>
+                    <View style={styles.quickQuestionShimmer} />
+                  </LinearGradient>
                 </TouchableOpacity>
               ))}
             </View>
@@ -268,42 +293,56 @@ export default function ChatScreen() {
         </ScrollView>
 
         <View style={styles.inputContainer}>
-          <View style={[styles.inputWrapper, { minHeight: inputHeight + 16 }]}>
-            <TextInput
-              ref={textInputRef}
-              style={[styles.textInput, { height: inputHeight }]}
-              value={inputText}
-              onChangeText={setInputText}
-              placeholder="Message Discover Diani..."
-              placeholderTextColor={colors.placeholder}
-              multiline
-              maxLength={500}
-              onContentSizeChange={handleContentSizeChange}
-              textAlignVertical="top"
-            />
-            <View style={styles.inputActions}>
-              <TouchableOpacity
-                style={styles.voiceButton}
-                onPress={handleVoiceInput}
-                activeOpacity={0.7}>
-                {isListening ? (
-                  <MicOff size={20} color={colors.textTertiary} />
-                ) : (
-                  <Mic size={20} color={colors.textTertiary} />
-                )}
-              </TouchableOpacity>
-              
-              {inputText.trim() ? (
+          <LinearGradient
+            colors={[colors.surface, colors.surfaceElevated]}
+            style={styles.inputContainerGradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+          >
+            <View style={[styles.inputWrapper, { minHeight: inputHeight + 16 }]}>
+              <TextInput
+                ref={textInputRef}
+                style={[styles.textInput, { height: inputHeight }]}
+                value={inputText}
+                onChangeText={setInputText}
+                placeholder="Message Discover Diani..."
+                placeholderTextColor={colors.placeholder}
+                multiline
+                maxLength={500}
+                onContentSizeChange={handleContentSizeChange}
+                textAlignVertical="top"
+              />
+              <View style={styles.inputActions}>
                 <TouchableOpacity
-                  style={styles.sendButton}
-                  onPress={handleSendMessage}
-                  disabled={!inputText.trim() || isLoadingResponse}
-                  activeOpacity={0.8}>
-                  <ArrowUp size={20} color="#FFFFFF" />
+                  style={styles.voiceButton}
+                  onPress={handleVoiceInput}
+                  activeOpacity={0.7}>
+                  {isListening ? (
+                    <MicOff size={20} color={colors.textTertiary} />
+                  ) : (
+                    <Mic size={20} color={colors.textTertiary} />
+                  )}
                 </TouchableOpacity>
-              ) : null}
+                
+                {inputText.trim() ? (
+                  <TouchableOpacity
+                    style={styles.sendButton}
+                    onPress={handleSendMessage}
+                    disabled={!inputText.trim() || isLoadingResponse}
+                    activeOpacity={0.8}>
+                    <LinearGradient
+                      colors={[colors.primary, colors.primaryDark]}
+                      style={styles.sendButtonGradient}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                    >
+                      <ArrowUp size={20} color="#FFFFFF" />
+                    </LinearGradient>
+                  </TouchableOpacity>
+                ) : null}
+              </View>
             </View>
-          </View>
+          </LinearGradient>
         </View>
       </KeyboardAvoidingView>
 
@@ -321,25 +360,60 @@ const createStyles = (colors: any) => StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: colors.surface,
+    shadowColor: colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  headerGradient: {
     paddingVertical: 20,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
+  },
+  headerContent: {
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: colors.shadow,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+  },
+  logoContainer: {
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   headerLogo: {
     width: 80,
     height: 80,
+  },
+  logoGlow: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: colors.primary,
+    opacity: 0.1,
+    zIndex: -1,
+  },
+  aiIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    backgroundColor: colors.primaryLight,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  aiText: {
+    fontSize: 12,
+    fontFamily: 'Roboto-Medium',
+    color: colors.primary,
+    marginLeft: 4,
+    letterSpacing: 0.5,
   },
   messagesContainer: {
     flex: 1,
@@ -357,29 +431,44 @@ const createStyles = (colors: any) => StyleSheet.create({
     color: colors.text,
     marginBottom: 16,
     textAlign: 'center',
+    letterSpacing: 0.2,
   },
   quickQuestionButton: {
-    backgroundColor: colors.surface,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderRadius: 25,
     marginVertical: 6,
-    borderWidth: 1.5,
-    borderColor: colors.primary,
+    borderRadius: 28,
     shadowColor: colors.primary,
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 3,
     },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  quickQuestionGradient: {
+    paddingVertical: 18,
+    paddingHorizontal: 24,
+    borderRadius: 28,
+    borderWidth: 1.5,
+    borderColor: colors.primary,
+    position: 'relative',
+    overflow: 'hidden',
   },
   quickQuestionText: {
     fontSize: 15,
     fontFamily: 'Roboto-Medium',
     color: colors.primary,
     textAlign: 'center',
+    letterSpacing: 0.3,
+  },
+  quickQuestionShimmer: {
+    position: 'absolute',
+    top: 0,
+    left: -100,
+    width: 100,
+    height: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    transform: [{ skewX: '-20deg' }],
   },
   cardsContainer: {
     marginTop: 12,
@@ -415,51 +504,52 @@ const createStyles = (colors: any) => StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: colors.textTertiary,
+    backgroundColor: colors.primary,
     marginHorizontal: 2,
   },
   typingDot1: {
-    opacity: 0.3,
+    opacity: 0.4,
   },
   typingDot2: {
-    opacity: 0.6,
+    opacity: 0.7,
   },
   typingDot3: {
     opacity: 1,
   },
   inputContainer: {
-    backgroundColor: colors.surface,
+    shadowColor: colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: -4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  inputContainerGradient: {
     paddingHorizontal: 16,
     paddingVertical: 12,
     paddingBottom: 34,
     borderTopWidth: 1,
     borderTopColor: colors.border,
-    shadowColor: colors.shadow,
-    shadowOffset: {
-      width: 0,
-      height: -2,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 5,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     backgroundColor: colors.inputBackground,
-    borderRadius: 24,
-    paddingHorizontal: 16,
+    borderRadius: 28,
+    paddingHorizontal: 20,
     paddingVertical: 8,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: colors.inputBorder,
     shadowColor: colors.shadow,
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
   },
   textInput: {
     flex: 1,
@@ -477,28 +567,41 @@ const createStyles = (colors: any) => StyleSheet.create({
     paddingBottom: 8,
   },
   voiceButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,
+    backgroundColor: colors.surfaceSecondary,
+    shadowColor: colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   sendButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     marginLeft: 8,
     shadowColor: colors.primary,
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 3,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  sendButtonGradient: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
