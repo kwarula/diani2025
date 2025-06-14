@@ -25,7 +25,27 @@ import {
   Share,
   Mail,
   Camera,
+  Users,
+  Calendar,
+  DollarSign,
+  Wifi,
+  Car,
+  Coffee,
+  Utensils,
+  Waves,
+  TreePine,
+  Shield,
+  Award,
+  Heart,
+  MessageCircle,
+  ExternalLink,
+  Play,
+  ChevronRight,
+  Info,
+  CheckCircle,
+  AlertCircle,
 } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useSavedItems, InfoCardData } from '@/hooks/useSavedItems';
 
@@ -43,15 +63,56 @@ interface DetailedInfoData extends InfoCardData {
   features?: string[];
   gallery?: string[];
   fullDescription?: string;
+  // Restaurant specific
+  cuisine?: string;
+  dietaryOptions?: string[];
+  reservationRequired?: boolean;
+  averageMealPrice?: string;
+  chefSpecialty?: string;
+  // Hotel specific
+  roomTypes?: Array<{
+    type: string;
+    price: string;
+    amenities: string[];
+    maxOccupancy: number;
+  }>;
+  hotelAmenities?: string[];
+  checkInTime?: string;
+  checkOutTime?: string;
+  cancellationPolicy?: string;
+  // Activity specific
+  duration?: string;
+  difficulty?: 'Easy' | 'Moderate' | 'Challenging';
+  groupSize?: string;
+  equipment?: string[];
+  seasonality?: string;
+  safetyInfo?: string[];
+  // General
+  socialMedia?: {
+    instagram?: string;
+    facebook?: string;
+    twitter?: string;
+  };
+  reviews?: Array<{
+    id: string;
+    author: string;
+    rating: number;
+    comment: string;
+    date: string;
+    avatar?: string;
+  }>;
+  nearbyAttractions?: string[];
+  accessibility?: string[];
+  languages?: string[];
 }
 
-// Sample detailed data - in a real app, this would come from an API
+// Enhanced sample data with category-specific information
 const sampleDetailedData: { [key: string]: DetailedInfoData } = {
   '1': {
     id: '1',
     title: 'Ali Barbour\'s Cave Restaurant',
     description: 'Unique dining experience in a natural coral cave with fresh seafood and romantic ambiance.',
-    fullDescription: 'Ali Barbour\'s Cave Restaurant offers an extraordinary dining experience in a natural coral cave that\'s over 120,000 years old. The restaurant features fresh seafood, international cuisine, and an extensive wine list. The unique setting, with its natural rock formations and candlelit atmosphere, makes it perfect for romantic dinners and special occasions.',
+    fullDescription: 'Ali Barbour\'s Cave Restaurant offers an extraordinary dining experience in a natural coral cave that\'s over 120,000 years old. The restaurant features fresh seafood, international cuisine, and an extensive wine list. The unique setting, with its natural rock formations and candlelit atmosphere, makes it perfect for romantic dinners and special occasions. Our chef sources ingredients locally, supporting the community while ensuring the freshest flavors.',
     category: 'Restaurant',
     location: 'Diani Beach Road, Kwale',
     imageUrl: 'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
@@ -61,6 +122,11 @@ const sampleDetailedData: { [key: string]: DetailedInfoData } = {
     rating: 4.8,
     reviewCount: 342,
     priceRange: '$$$',
+    cuisine: 'Seafood & International',
+    dietaryOptions: ['Vegetarian', 'Gluten-Free', 'Halal'],
+    reservationRequired: true,
+    averageMealPrice: '$45-65',
+    chefSpecialty: 'Grilled Lobster with Coconut Curry',
     openingHours: {
       'Monday': '6:00 PM - 11:00 PM',
       'Tuesday': '6:00 PM - 11:00 PM',
@@ -70,49 +136,43 @@ const sampleDetailedData: { [key: string]: DetailedInfoData } = {
       'Saturday': '6:00 PM - 11:00 PM',
       'Sunday': '6:00 PM - 11:00 PM',
     },
-    features: ['Romantic Setting', 'Fresh Seafood', 'Wine Selection', 'Cave Dining', 'Candlelit Atmosphere'],
+    features: ['Romantic Setting', 'Fresh Seafood', 'Wine Selection', 'Cave Dining', 'Candlelit Atmosphere', 'Live Music'],
     gallery: [
       'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
       'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg',
       'https://images.pexels.com/photos/1126728/pexels-photo-1126728.jpeg',
       'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg',
     ],
+    socialMedia: {
+      instagram: '@alibarbourscave',
+      facebook: 'AliBarboursCave',
+    },
+    reviews: [
+      {
+        id: '1',
+        author: 'Sarah Johnson',
+        rating: 5,
+        comment: 'Absolutely magical experience! The cave setting is breathtaking and the seafood is incredibly fresh.',
+        date: '2024-01-15',
+        avatar: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg',
+      },
+      {
+        id: '2',
+        author: 'Michael Chen',
+        rating: 4,
+        comment: 'Unique atmosphere and excellent service. The lobster was perfectly prepared.',
+        date: '2024-01-10',
+        avatar: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg',
+      },
+    ],
+    accessibility: ['Wheelchair accessible entrance', 'Accessible restrooms'],
+    languages: ['English', 'Swahili', 'French'],
   },
   '2': {
     id: '2',
-    title: 'The Sands at Nomad',
-    description: 'Beachfront dining with international cuisine and stunning ocean views.',
-    fullDescription: 'The Sands at Nomad is a premier beachfront restaurant offering international cuisine with a focus on fresh, local ingredients. Located directly on Diani Beach, guests can enjoy their meals with unobstructed views of the Indian Ocean. The restaurant features both indoor and outdoor seating, with a relaxed yet sophisticated atmosphere.',
-    category: 'Restaurant',
-    location: 'Diani Beach',
-    imageUrl: 'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg',
-    phone: '+254 722 567890',
-    email: 'reservations@thesandsatnomad.com',
-    website: 'thesandsatnomad.com',
-    rating: 4.6,
-    reviewCount: 198,
-    priceRange: '$$',
-    openingHours: {
-      'Monday': '7:00 AM - 11:00 PM',
-      'Tuesday': '7:00 AM - 11:00 PM',
-      'Wednesday': '7:00 AM - 11:00 PM',
-      'Thursday': '7:00 AM - 11:00 PM',
-      'Friday': '7:00 AM - 11:00 PM',
-      'Saturday': '7:00 AM - 11:00 PM',
-      'Sunday': '7:00 AM - 11:00 PM',
-    },
-    features: ['Ocean Views', 'Beachfront', 'International Cuisine', 'Outdoor Seating', 'Sunset Views'],
-    gallery: [
-      'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg',
-      'https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg',
-      'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
-    ],
-  },
-  '3': {
-    id: '3',
     title: 'Almanara Luxury Resort',
     description: 'Exclusive beachfront resort with private villas, spa services, and pristine white sand beaches.',
-    fullDescription: 'Almanara Luxury Resort is an exclusive beachfront property offering unparalleled luxury on Diani Beach. The resort features private villas with direct beach access, world-class spa services, and personalized butler service. Each villa is designed with traditional Swahili architecture blended with modern amenities, creating a perfect sanctuary for discerning travelers.',
+    fullDescription: 'Almanara Luxury Resort is an exclusive beachfront property offering unparalleled luxury on Diani Beach. The resort features private villas with direct beach access, world-class spa services, and personalized butler service. Each villa is designed with traditional Swahili architecture blended with modern amenities, creating a perfect sanctuary for discerning travelers seeking privacy and luxury.',
     category: 'Hotel',
     location: 'Diani Beach',
     imageUrl: 'https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg',
@@ -122,6 +182,30 @@ const sampleDetailedData: { [key: string]: DetailedInfoData } = {
     rating: 4.9,
     reviewCount: 156,
     priceRange: '$$$$',
+    checkInTime: '3:00 PM',
+    checkOutTime: '12:00 PM',
+    cancellationPolicy: 'Free cancellation up to 48 hours before check-in',
+    roomTypes: [
+      {
+        type: 'Ocean Villa',
+        price: '$450/night',
+        amenities: ['Private pool', 'Ocean view', 'Butler service', 'Kitchenette'],
+        maxOccupancy: 4,
+      },
+      {
+        type: 'Beach Villa',
+        price: '$350/night',
+        amenities: ['Direct beach access', 'Garden view', 'Private terrace'],
+        maxOccupancy: 2,
+      },
+      {
+        type: 'Garden Suite',
+        price: '$250/night',
+        amenities: ['Garden view', 'Balcony', 'Mini bar'],
+        maxOccupancy: 2,
+      },
+    ],
+    hotelAmenities: ['Spa', 'Private Beach', 'Fine Dining', 'Infinity Pool', 'Fitness Center', 'Water Sports', 'Butler Service', 'Airport Transfer'],
     features: ['Private Villas', 'Spa Services', 'Butler Service', 'Beach Access', 'Fine Dining', 'Pool'],
     gallery: [
       'https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg',
@@ -129,6 +213,50 @@ const sampleDetailedData: { [key: string]: DetailedInfoData } = {
       'https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg',
       'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg',
     ],
+    socialMedia: {
+      instagram: '@almanararesort',
+      facebook: 'AlmanaraLuxuryResort',
+    },
+    accessibility: ['Wheelchair accessible rooms', 'Accessible pool area', 'Braille signage'],
+    languages: ['English', 'Swahili', 'German', 'Italian'],
+  },
+  '3': {
+    id: '3',
+    title: 'Diani Kite Surfing Adventure',
+    description: 'Professional kite surfing lessons and equipment rental with certified instructors.',
+    fullDescription: 'Experience the thrill of kite surfing on the pristine waters of Diani Beach with our professional instructors. Whether you\'re a complete beginner or looking to improve your skills, our certified team provides personalized instruction in a safe and fun environment. We use only the latest equipment and follow international safety standards.',
+    category: 'Activity',
+    location: 'Diani Beach',
+    imageUrl: 'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg',
+    phone: '+254 722 567890',
+    email: 'info@dianikitesurf.com',
+    website: 'dianikitesurf.com',
+    rating: 4.7,
+    reviewCount: 89,
+    priceRange: '$$',
+    duration: '2-4 hours',
+    difficulty: 'Easy',
+    groupSize: 'Max 6 people',
+    equipment: ['Kite', 'Board', 'Harness', 'Helmet', 'Life jacket'],
+    seasonality: 'Best conditions: December - March, June - September',
+    safetyInfo: [
+      'All equipment regularly inspected',
+      'Certified instructors with rescue training',
+      'Weather conditions monitored constantly',
+      'First aid kit on site',
+    ],
+    features: ['Professional Instruction', 'Equipment Included', 'Small Groups', 'Safety First', 'All Levels Welcome'],
+    gallery: [
+      'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg',
+      'https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg',
+      'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg',
+    ],
+    socialMedia: {
+      instagram: '@dianikitesurf',
+      facebook: 'DianiKiteSurfing',
+    },
+    accessibility: ['Adapted equipment available', 'Beach wheelchair access'],
+    languages: ['English', 'Swahili', 'French', 'Spanish'],
   },
 };
 
@@ -138,11 +266,12 @@ export default function DetailsScreen() {
   const { colors } = useTheme();
   const { toggleSaveItem, isItemSaved } = useSavedItems();
   
-  // Initialize styles early to prevent initialization errors
   const styles = createStyles(colors);
   
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [detailData, setDetailData] = useState<DetailedInfoData | null>(null);
+  const [selectedRoomType, setSelectedRoomType] = useState(0);
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   useEffect(() => {
     if (id && sampleDetailedData[id]) {
@@ -154,6 +283,7 @@ export default function DetailsScreen() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.errorContainer}>
+          <AlertCircle size={48} color={colors.textSecondary} />
           <Text style={[styles.errorText, { color: colors.text }]}>
             Information not found
           </Text>
@@ -208,13 +338,30 @@ export default function DetailsScreen() {
         Alert.alert('Share', 'Sharing is not supported on this platform');
       }
     } else {
-      // For mobile platforms, you would use react-native-share or similar
       Alert.alert('Share', `Share ${detailData.title}`);
     }
   };
 
   const handleToggleSave = () => {
     toggleSaveItem(detailData);
+  };
+
+  const handleSocialMedia = (platform: string, handle: string) => {
+    let url = '';
+    switch (platform) {
+      case 'instagram':
+        url = `https://instagram.com/${handle.replace('@', '')}`;
+        break;
+      case 'facebook':
+        url = `https://facebook.com/${handle}`;
+        break;
+      case 'twitter':
+        url = `https://twitter.com/${handle.replace('@', '')}`;
+        break;
+    }
+    if (url) {
+      Linking.openURL(url);
+    }
   };
 
   const getCategoryColor = (category: string) => {
@@ -229,6 +376,19 @@ export default function DetailsScreen() {
         return '#8B5CF6';
       default:
         return colors.accent;
+    }
+  };
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        return colors.success;
+      case 'moderate':
+        return colors.warning;
+      case 'challenging':
+        return colors.error;
+      default:
+        return colors.textSecondary;
     }
   };
 
@@ -257,6 +417,264 @@ export default function DetailsScreen() {
     }
 
     return stars;
+  };
+
+  const renderCategorySpecificContent = () => {
+    switch (detailData.category.toLowerCase()) {
+      case 'restaurant':
+        return (
+          <>
+            {/* Restaurant Specific Info */}
+            <View style={styles.categorySection}>
+              <Text style={styles.sectionTitle}>Restaurant Details</Text>
+              <View style={styles.infoGrid}>
+                <View style={styles.infoItem}>
+                  <Utensils size={20} color={colors.success} />
+                  <View style={styles.infoContent}>
+                    <Text style={styles.infoLabel}>Cuisine</Text>
+                    <Text style={styles.infoValue}>{detailData.cuisine}</Text>
+                  </View>
+                </View>
+                
+                <View style={styles.infoItem}>
+                  <DollarSign size={20} color={colors.warning} />
+                  <View style={styles.infoContent}>
+                    <Text style={styles.infoLabel}>Average Meal Price</Text>
+                    <Text style={styles.infoValue}>{detailData.averageMealPrice}</Text>
+                  </View>
+                </View>
+
+                {detailData.chefSpecialty && (
+                  <View style={styles.infoItem}>
+                    <Award size={20} color={colors.primary} />
+                    <View style={styles.infoContent}>
+                      <Text style={styles.infoLabel}>Chef's Specialty</Text>
+                      <Text style={styles.infoValue}>{detailData.chefSpecialty}</Text>
+                    </View>
+                  </View>
+                )}
+
+                {detailData.reservationRequired && (
+                  <View style={styles.infoItem}>
+                    <Calendar size={20} color={colors.error} />
+                    <View style={styles.infoContent}>
+                      <Text style={styles.infoLabel}>Reservation</Text>
+                      <Text style={styles.infoValue}>Required</Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              {detailData.dietaryOptions && detailData.dietaryOptions.length > 0 && (
+                <View style={styles.tagsSection}>
+                  <Text style={styles.tagsTitle}>Dietary Options</Text>
+                  <View style={styles.tagsContainer}>
+                    {detailData.dietaryOptions.map((option, index) => (
+                      <View key={index} style={[styles.tag, { backgroundColor: colors.success + '20', borderColor: colors.success }]}>
+                        <CheckCircle size={12} color={colors.success} />
+                        <Text style={[styles.tagText, { color: colors.success }]}>{option}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+            </View>
+          </>
+        );
+
+      case 'hotel':
+        return (
+          <>
+            {/* Hotel Specific Info */}
+            <View style={styles.categorySection}>
+              <Text style={styles.sectionTitle}>Hotel Information</Text>
+              <View style={styles.infoGrid}>
+                <View style={styles.infoItem}>
+                  <Clock size={20} color={colors.primary} />
+                  <View style={styles.infoContent}>
+                    <Text style={styles.infoLabel}>Check-in / Check-out</Text>
+                    <Text style={styles.infoValue}>{detailData.checkInTime} / {detailData.checkOutTime}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.infoItem}>
+                  <Shield size={20} color={colors.success} />
+                  <View style={styles.infoContent}>
+                    <Text style={styles.infoLabel}>Cancellation</Text>
+                    <Text style={styles.infoValue}>{detailData.cancellationPolicy}</Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Room Types */}
+              {detailData.roomTypes && detailData.roomTypes.length > 0 && (
+                <View style={styles.roomTypesSection}>
+                  <Text style={styles.sectionTitle}>Room Types</Text>
+                  {detailData.roomTypes.map((room, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        styles.roomTypeCard,
+                        selectedRoomType === index && styles.roomTypeCardSelected
+                      ]}
+                      onPress={() => setSelectedRoomType(index)}
+                    >
+                      <View style={styles.roomTypeHeader}>
+                        <Text style={styles.roomTypeName}>{room.type}</Text>
+                        <Text style={styles.roomTypePrice}>{room.price}</Text>
+                      </View>
+                      <View style={styles.roomTypeDetails}>
+                        <View style={styles.roomTypeInfo}>
+                          <Users size={14} color={colors.textSecondary} />
+                          <Text style={styles.roomTypeText}>Max {room.maxOccupancy} guests</Text>
+                        </View>
+                        <View style={styles.roomAmenities}>
+                          {room.amenities.slice(0, 3).map((amenity, idx) => (
+                            <Text key={idx} style={styles.amenityText}>• {amenity}</Text>
+                          ))}
+                          {room.amenities.length > 3 && (
+                            <Text style={styles.moreAmenities}>+{room.amenities.length - 3} more</Text>
+                          )}
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+
+              {/* Hotel Amenities */}
+              {detailData.hotelAmenities && detailData.hotelAmenities.length > 0 && (
+                <View style={styles.amenitiesSection}>
+                  <Text style={styles.sectionTitle}>Hotel Amenities</Text>
+                  <View style={styles.amenitiesGrid}>
+                    {detailData.hotelAmenities.map((amenity, index) => (
+                      <View key={index} style={styles.amenityItem}>
+                        <View style={styles.amenityIcon}>
+                          {getAmenityIcon(amenity)}
+                        </View>
+                        <Text style={styles.amenityLabel}>{amenity}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+            </View>
+          </>
+        );
+
+      case 'activity':
+        return (
+          <>
+            {/* Activity Specific Info */}
+            <View style={styles.categorySection}>
+              <Text style={styles.sectionTitle}>Activity Details</Text>
+              <View style={styles.infoGrid}>
+                <View style={styles.infoItem}>
+                  <Clock size={20} color={colors.primary} />
+                  <View style={styles.infoContent}>
+                    <Text style={styles.infoLabel}>Duration</Text>
+                    <Text style={styles.infoValue}>{detailData.duration}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.infoItem}>
+                  <View style={[styles.difficultyIcon, { backgroundColor: getDifficultyColor(detailData.difficulty || '') + '20' }]}>
+                    <Text style={[styles.difficultyText, { color: getDifficultyColor(detailData.difficulty || '') }]}>
+                      {detailData.difficulty?.charAt(0)}
+                    </Text>
+                  </View>
+                  <View style={styles.infoContent}>
+                    <Text style={styles.infoLabel}>Difficulty</Text>
+                    <Text style={[styles.infoValue, { color: getDifficultyColor(detailData.difficulty || '') }]}>
+                      {detailData.difficulty}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={styles.infoItem}>
+                  <Users size={20} color={colors.warning} />
+                  <View style={styles.infoContent}>
+                    <Text style={styles.infoLabel}>Group Size</Text>
+                    <Text style={styles.infoValue}>{detailData.groupSize}</Text>
+                  </View>
+                </View>
+
+                {detailData.seasonality && (
+                  <View style={styles.infoItem}>
+                    <Calendar size={20} color={colors.success} />
+                    <View style={styles.infoContent}>
+                      <Text style={styles.infoLabel}>Best Season</Text>
+                      <Text style={styles.infoValue}>{detailData.seasonality}</Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              {/* Equipment */}
+              {detailData.equipment && detailData.equipment.length > 0 && (
+                <View style={styles.tagsSection}>
+                  <Text style={styles.tagsTitle}>Equipment Included</Text>
+                  <View style={styles.tagsContainer}>
+                    {detailData.equipment.map((item, index) => (
+                      <View key={index} style={[styles.tag, { backgroundColor: colors.primary + '20', borderColor: colors.primary }]}>
+                        <CheckCircle size={12} color={colors.primary} />
+                        <Text style={[styles.tagText, { color: colors.primary }]}>{item}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+
+              {/* Safety Information */}
+              {detailData.safetyInfo && detailData.safetyInfo.length > 0 && (
+                <View style={styles.safetySection}>
+                  <Text style={styles.sectionTitle}>Safety Information</Text>
+                  {detailData.safetyInfo.map((info, index) => (
+                    <View key={index} style={styles.safetyItem}>
+                      <Shield size={16} color={colors.success} />
+                      <Text style={styles.safetyText}>{info}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </View>
+          </>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  const getAmenityIcon = (amenity: string) => {
+    const iconProps = { size: 20, color: colors.primary };
+    switch (amenity.toLowerCase()) {
+      case 'wifi':
+      case 'wi-fi':
+        return <Wifi {...iconProps} />;
+      case 'parking':
+      case 'car':
+        return <Car {...iconProps} />;
+      case 'spa':
+        return <Heart {...iconProps} />;
+      case 'pool':
+      case 'infinity pool':
+        return <Waves {...iconProps} />;
+      case 'fitness center':
+      case 'gym':
+        return <Users {...iconProps} />;
+      case 'restaurant':
+      case 'fine dining':
+        return <Utensils {...iconProps} />;
+      case 'coffee':
+      case 'cafe':
+        return <Coffee {...iconProps} />;
+      case 'garden':
+      case 'private beach':
+        return <TreePine {...iconProps} />;
+      default:
+        return <CheckCircle {...iconProps} />;
+    }
   };
 
   return (
@@ -342,10 +760,11 @@ export default function DetailsScreen() {
 
           {/* Location */}
           {detailData.location && (
-            <View style={styles.locationSection}>
+            <TouchableOpacity style={styles.locationSection} onPress={handleDirections}>
               <MapPin size={20} color={colors.textSecondary} />
               <Text style={styles.locationText}>{detailData.location}</Text>
-            </View>
+              <ChevronRight size={16} color={colors.textSecondary} />
+            </TouchableOpacity>
           )}
 
           {/* Description */}
@@ -356,13 +775,17 @@ export default function DetailsScreen() {
             </Text>
           </View>
 
+          {/* Category Specific Content */}
+          {renderCategorySpecificContent()}
+
           {/* Features */}
           {detailData.features && detailData.features.length > 0 && (
             <View style={styles.featuresSection}>
-              <Text style={styles.sectionTitle}>Features</Text>
+              <Text style={styles.sectionTitle}>Features & Highlights</Text>
               <View style={styles.featuresGrid}>
                 {detailData.features.map((feature, index) => (
                   <View key={index} style={styles.featureItem}>
+                    <CheckCircle size={16} color={colors.success} />
                     <Text style={styles.featureText}>{feature}</Text>
                   </View>
                 ))}
@@ -385,6 +808,63 @@ export default function DetailsScreen() {
             </View>
           )}
 
+          {/* Reviews */}
+          {detailData.reviews && detailData.reviews.length > 0 && (
+            <View style={styles.reviewsSection}>
+              <View style={styles.reviewsHeader}>
+                <Text style={styles.sectionTitle}>Reviews</Text>
+                <TouchableOpacity onPress={() => setShowAllReviews(!showAllReviews)}>
+                  <Text style={styles.viewAllText}>
+                    {showAllReviews ? 'Show Less' : 'View All'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              
+              {(showAllReviews ? detailData.reviews : detailData.reviews.slice(0, 2)).map((review) => (
+                <View key={review.id} style={styles.reviewItem}>
+                  <View style={styles.reviewHeader}>
+                    <Image source={{ uri: review.avatar }} style={styles.reviewAvatar} />
+                    <View style={styles.reviewInfo}>
+                      <Text style={styles.reviewAuthor}>{review.author}</Text>
+                      <View style={styles.reviewRating}>
+                        {renderStars(review.rating)}
+                        <Text style={styles.reviewDate}>{new Date(review.date).toLocaleDateString()}</Text>
+                      </View>
+                    </View>
+                  </View>
+                  <Text style={styles.reviewComment}>{review.comment}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* Social Media */}
+          {detailData.socialMedia && (
+            <View style={styles.socialSection}>
+              <Text style={styles.sectionTitle}>Follow Us</Text>
+              <View style={styles.socialContainer}>
+                {detailData.socialMedia.instagram && (
+                  <TouchableOpacity 
+                    style={styles.socialButton}
+                    onPress={() => handleSocialMedia('instagram', detailData.socialMedia!.instagram!)}
+                  >
+                    <Camera size={20} color="#E4405F" />
+                    <Text style={styles.socialText}>Instagram</Text>
+                  </TouchableOpacity>
+                )}
+                {detailData.socialMedia.facebook && (
+                  <TouchableOpacity 
+                    style={styles.socialButton}
+                    onPress={() => handleSocialMedia('facebook', detailData.socialMedia!.facebook!)}
+                  >
+                    <Users size={20} color="#1877F2" />
+                    <Text style={styles.socialText}>Facebook</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          )}
+
           {/* Contact Information */}
           <View style={styles.contactSection}>
             <Text style={styles.sectionTitle}>Contact Information</Text>
@@ -398,6 +878,7 @@ export default function DetailsScreen() {
                     <Text style={styles.contactLabel}>Phone</Text>
                     <Text style={styles.contactValue}>{detailData.phone}</Text>
                   </View>
+                  <ExternalLink size={16} color={colors.textTertiary} />
                 </TouchableOpacity>
               )}
 
@@ -410,6 +891,7 @@ export default function DetailsScreen() {
                     <Text style={styles.contactLabel}>Email</Text>
                     <Text style={styles.contactValue}>{detailData.email}</Text>
                   </View>
+                  <ExternalLink size={16} color={colors.textTertiary} />
                 </TouchableOpacity>
               )}
 
@@ -422,10 +904,41 @@ export default function DetailsScreen() {
                     <Text style={styles.contactLabel}>Website</Text>
                     <Text style={styles.contactValue}>{detailData.website}</Text>
                   </View>
+                  <ExternalLink size={16} color={colors.textTertiary} />
                 </TouchableOpacity>
               )}
             </View>
           </View>
+
+          {/* Accessibility & Languages */}
+          {(detailData.accessibility || detailData.languages) && (
+            <View style={styles.additionalInfoSection}>
+              {detailData.accessibility && detailData.accessibility.length > 0 && (
+                <View style={styles.accessibilitySection}>
+                  <Text style={styles.sectionTitle}>Accessibility</Text>
+                  {detailData.accessibility.map((item, index) => (
+                    <View key={index} style={styles.accessibilityItem}>
+                      <CheckCircle size={16} color={colors.success} />
+                      <Text style={styles.accessibilityText}>{item}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {detailData.languages && detailData.languages.length > 0 && (
+                <View style={styles.languagesSection}>
+                  <Text style={styles.sectionTitle}>Languages Spoken</Text>
+                  <View style={styles.languagesContainer}>
+                    {detailData.languages.map((language, index) => (
+                      <View key={index} style={styles.languageTag}>
+                        <Text style={styles.languageText}>{language}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+            </View>
+          )}
         </View>
       </ScrollView>
 
@@ -440,6 +953,13 @@ export default function DetailsScreen() {
           <TouchableOpacity style={styles.secondaryAction} onPress={handleCall}>
             <Phone size={20} color={colors.primary} />
             <Text style={styles.secondaryActionText}>Call</Text>
+          </TouchableOpacity>
+        )}
+
+        {detailData.website && (
+          <TouchableOpacity style={styles.secondaryAction} onPress={handleWebsite}>
+            <Globe size={20} color={colors.primary} />
+            <Text style={styles.secondaryActionText}>Website</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -508,7 +1028,7 @@ const createStyles = (colors: any) => StyleSheet.create({
   },
   content: {
     padding: 20,
-    paddingBottom: 100,
+    paddingBottom: 120,
   },
   titleSection: {
     marginBottom: 20,
@@ -596,27 +1116,198 @@ const createStyles = (colors: any) => StyleSheet.create({
     color: colors.textSecondary,
     lineHeight: 24,
   },
+  categorySection: {
+    marginBottom: 32,
+  },
+  infoGrid: {
+    gap: 16,
+  },
+  infoItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  infoContent: {
+    marginLeft: 16,
+    flex: 1,
+  },
+  infoLabel: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Medium',
+    color: colors.textSecondary,
+    marginBottom: 4,
+  },
+  infoValue: {
+    fontSize: 16,
+    fontFamily: 'Roboto-Regular',
+    color: colors.text,
+  },
+  difficultyIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  difficultyText: {
+    fontSize: 16,
+    fontFamily: 'Roboto-Bold',
+    textTransform: 'uppercase',
+  },
+  tagsSection: {
+    marginTop: 20,
+  },
+  tagsTitle: {
+    fontSize: 16,
+    fontFamily: 'Roboto-Bold',
+    color: colors.text,
+    marginBottom: 12,
+  },
+  tagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  tag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+  },
+  tagText: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Medium',
+    marginLeft: 6,
+  },
+  roomTypesSection: {
+    marginTop: 20,
+  },
+  roomTypeCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 2,
+    borderColor: colors.border,
+  },
+  roomTypeCardSelected: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primaryLight,
+  },
+  roomTypeHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  roomTypeName: {
+    fontSize: 18,
+    fontFamily: 'Roboto-Bold',
+    color: colors.text,
+  },
+  roomTypePrice: {
+    fontSize: 16,
+    fontFamily: 'Roboto-Bold',
+    color: colors.primary,
+  },
+  roomTypeDetails: {
+    gap: 8,
+  },
+  roomTypeInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  roomTypeText: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
+    color: colors.textSecondary,
+    marginLeft: 8,
+  },
+  roomAmenities: {
+    gap: 4,
+  },
+  amenityText: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
+    color: colors.textSecondary,
+  },
+  moreAmenities: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Medium',
+    color: colors.primary,
+  },
+  amenitiesSection: {
+    marginTop: 20,
+  },
+  amenitiesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+  },
+  amenityItem: {
+    alignItems: 'center',
+    width: (screenWidth - 80) / 4,
+  },
+  amenityIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: colors.primaryLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  amenityLabel: {
+    fontSize: 12,
+    fontFamily: 'Roboto-Medium',
+    color: colors.text,
+    textAlign: 'center',
+  },
+  safetySection: {
+    marginTop: 20,
+  },
+  safetyItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  safetyText: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
+    color: colors.textSecondary,
+    marginLeft: 12,
+    flex: 1,
+  },
   featuresSection: {
     marginBottom: 32,
   },
   featuresGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginHorizontal: -6,
+    gap: 12,
   },
   featureItem: {
-    backgroundColor: colors.primaryLight,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    margin: 6,
-    borderWidth: 1,
-    borderColor: colors.primary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    padding: 12,
+    borderRadius: 8,
   },
   featureText: {
     fontSize: 14,
     fontFamily: 'Roboto-Medium',
-    color: colors.primary,
+    color: colors.text,
+    marginLeft: 12,
   },
   hoursSection: {
     marginBottom: 32,
@@ -651,6 +1342,93 @@ const createStyles = (colors: any) => StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Roboto-Regular',
     color: colors.textSecondary,
+  },
+  reviewsSection: {
+    marginBottom: 32,
+  },
+  reviewsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  viewAllText: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Medium',
+    color: colors.primary,
+  },
+  reviewItem: {
+    backgroundColor: colors.surface,
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    shadowColor: colors.shadow,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  reviewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  reviewAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 12,
+  },
+  reviewInfo: {
+    flex: 1,
+  },
+  reviewAuthor: {
+    fontSize: 16,
+    fontFamily: 'Roboto-Bold',
+    color: colors.text,
+    marginBottom: 4,
+  },
+  reviewRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  reviewDate: {
+    fontSize: 12,
+    fontFamily: 'Roboto-Regular',
+    color: colors.textSecondary,
+    marginLeft: 8,
+  },
+  reviewComment: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
+    color: colors.textSecondary,
+    lineHeight: 20,
+  },
+  socialSection: {
+    marginBottom: 32,
+  },
+  socialContainer: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  socialButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    flex: 1,
+    justifyContent: 'center',
+  },
+  socialText: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Medium',
+    color: colors.text,
+    marginLeft: 8,
   },
   contactSection: {
     marginBottom: 32,
@@ -695,6 +1473,44 @@ const createStyles = (colors: any) => StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Roboto-Regular',
     color: colors.text,
+  },
+  additionalInfoSection: {
+    marginBottom: 32,
+  },
+  accessibilitySection: {
+    marginBottom: 20,
+  },
+  accessibilityItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  accessibilityText: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
+    color: colors.textSecondary,
+    marginLeft: 12,
+  },
+  languagesSection: {
+    marginBottom: 20,
+  },
+  languagesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  languageTag: {
+    backgroundColor: colors.primaryLight,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  languageText: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Medium',
+    color: colors.primary,
   },
   bottomActions: {
     position: 'absolute',
@@ -746,7 +1562,7 @@ const createStyles = (colors: any) => StyleSheet.create({
     flex: 1,
     backgroundColor: colors.surfaceSecondary,
     paddingVertical: 16,
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
     borderRadius: 25,
     flexDirection: 'row',
     alignItems: 'center',
@@ -755,10 +1571,10 @@ const createStyles = (colors: any) => StyleSheet.create({
     borderColor: colors.primary,
   },
   secondaryActionText: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: 'Roboto-Bold',
     color: colors.primary,
-    marginLeft: 8,
+    marginLeft: 6,
   },
   errorContainer: {
     flex: 1,
@@ -769,7 +1585,7 @@ const createStyles = (colors: any) => StyleSheet.create({
   errorText: {
     fontSize: 18,
     fontFamily: 'Roboto-Medium',
-    marginBottom: 24,
+    marginVertical: 24,
     textAlign: 'center',
   },
   backButton: {
