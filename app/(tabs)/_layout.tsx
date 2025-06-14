@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { MessageCircle, Settings, Bookmark } from 'lucide-react-native';
+import { MessageCircle, Settings, Bookmark, Compass } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 
 export default function TabLayout() {
@@ -38,6 +38,15 @@ export default function TabLayout() {
           title: 'Chat',
           tabBarIcon: ({ size, color }) => (
             <MessageCircle size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="discover"
+        options={{
+          title: 'Discover',
+          tabBarIcon: ({ size, color }) => (
+            <Compass size={size} color={color} />
           ),
         }}
       />
