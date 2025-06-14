@@ -11,13 +11,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { 
-  User, 
-  ChevronRight, 
-  ChevronDown,
-  Languages,
-  Home
-} from 'lucide-react-native';
+import { User, ChevronRight, ChevronDown, Languages, Chrome as Home } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 
