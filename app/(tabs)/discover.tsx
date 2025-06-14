@@ -252,8 +252,8 @@ export default function DiscoverScreen() {
   };
 
   const handleItemPress = (item: CuratedItem) => {
-    // Navigate to details or handle item selection
-    console.log('Selected item:', item.title);
+    // Navigate to the details page with the item ID
+    router.push(`/details/${item.id}`);
   };
 
   const handleSaveItem = (item: CuratedItem) => {
@@ -367,7 +367,10 @@ export default function DiscoverScreen() {
                     )}
                     <TouchableOpacity 
                       style={styles.saveButtonOverlay} 
-                      onPress={() => handleSaveItem(item)}
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        handleSaveItem(item);
+                      }}
                     >
                       <Bookmark 
                         size={16} 
@@ -463,7 +466,10 @@ export default function DiscoverScreen() {
                   {/* Save Button */}
                   <TouchableOpacity 
                     style={styles.saveButton} 
-                    onPress={() => handleSaveItem(item)}
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      handleSaveItem(item);
+                    }}
                   >
                     <Bookmark 
                       size={16} 

@@ -227,6 +227,239 @@ const sampleDetailedData: { [key: string]: DetailedInfoData } = {
     accessibility: ['Adapted equipment available', 'Beach wheelchair access'],
     languages: ['English', 'Swahili', 'French', 'Spanish'],
   },
+  // Add data for Discover screen items
+  'local-1': {
+    id: 'local-1',
+    title: 'Hidden Coral Gardens',
+    description: 'Secret snorkeling spot known only to locals',
+    fullDescription: 'Discover the underwater paradise of Hidden Coral Gardens, a pristine snorkeling location that remains largely untouched by mass tourism. This secret spot, known primarily to local fishermen and marine enthusiasts, offers an incredible diversity of coral formations and marine life. The crystal-clear waters provide excellent visibility, making it perfect for both beginners and experienced snorkelers.',
+    category: 'Activity',
+    location: 'South Diani',
+    imageUrl: 'https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg',
+    phone: '+254 722 345678',
+    email: 'info@hiddencoralgardens.com',
+    website: 'hiddencoralgardens.com',
+    rating: 4.9,
+    reviewCount: 67,
+    priceRange: '$$',
+    duration: '3-4 hours',
+    difficulty: 'Easy',
+    groupSize: 'Max 8 people',
+    equipment: ['Snorkel gear', 'Life jacket', 'Underwater camera', 'Fins'],
+    seasonality: 'Year-round, best visibility October - April',
+    safetyInfo: [
+      'Professional dive guide included',
+      'Safety briefing before entry',
+      'Emergency equipment on boat',
+      'Marine life interaction guidelines',
+    ],
+    features: ['Pristine Coral Reefs', 'Diverse Marine Life', 'Local Guide', 'Small Groups', 'Untouched Nature'],
+    gallery: [
+      'https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg',
+      'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg',
+      'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg',
+    ],
+    socialMedia: {
+      instagram: '@hiddencoralgardens',
+      facebook: 'HiddenCoralGardens',
+    },
+    accessibility: ['Basic swimming ability required', 'Life jackets provided'],
+    languages: ['English', 'Swahili'],
+  },
+  'influencer-1': {
+    id: 'influencer-1',
+    title: 'Boho Beach Picnic Setup',
+    description: 'Instagram-worthy picnic experiences on the beach',
+    fullDescription: 'Create unforgettable memories with our curated boho beach picnic experiences. Each setup is carefully designed with authentic Moroccan rugs, macramé cushions, and elegant table settings that perfectly complement the natural beauty of Diani Beach. Our team handles everything from setup to cleanup, allowing you to focus on enjoying the moment and capturing stunning photos.',
+    category: 'Experience',
+    location: 'Diani Beach',
+    imageUrl: 'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg',
+    phone: '+254 733 456789',
+    email: 'bookings@bohopicnics.com',
+    website: 'bohopicnics.com',
+    rating: 4.7,
+    reviewCount: 124,
+    priceRange: '$$',
+    duration: '2-3 hours',
+    features: ['Instagram Setup', 'Boho Decor', 'Gourmet Food', 'Professional Photography', 'Sunset Timing'],
+    gallery: [
+      'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg',
+      'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg',
+      'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
+    ],
+    socialMedia: {
+      instagram: '@bohopicnicsdiani',
+      facebook: 'BohoBeachPicnics',
+    },
+    languages: ['English', 'Swahili'],
+  },
+  'tourist-1': {
+    id: 'tourist-1',
+    title: 'Authentic Dhow Sailing',
+    description: 'Traditional sailing experience at golden hour',
+    fullDescription: 'Step aboard a traditional dhow and experience the timeless beauty of sailing along the Kenyan coast. These handcrafted vessels have been used by local fishermen for centuries, and now you can enjoy the same peaceful journey across the turquoise waters of the Indian Ocean. The golden hour timing ensures spectacular sunset views and perfect lighting for photography.',
+    category: 'Activity',
+    location: 'Diani Marina',
+    imageUrl: 'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg',
+    phone: '+254 722 567890',
+    email: 'sail@dhowadventures.com',
+    website: 'dhowadventures.com',
+    rating: 4.8,
+    reviewCount: 89,
+    priceRange: '$$',
+    duration: '2 hours',
+    features: ['Traditional Dhow', 'Sunset Views', 'Cultural Experience', 'Light Refreshments', 'Photo Opportunities'],
+    gallery: [
+      'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg',
+      'https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg',
+      'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg',
+    ],
+    socialMedia: {
+      instagram: '@dhowsailing',
+      facebook: 'DhowSailingDiani',
+    },
+    languages: ['English', 'Swahili', 'German'],
+  },
+  'expert-1': {
+    id: 'expert-1',
+    title: 'Colobus Monkey Sanctuary',
+    description: 'Conservation center for endangered primates',
+    fullDescription: 'Visit the Colobus Conservation Centre, a vital sanctuary dedicated to protecting the endangered Angolan colobus monkeys and other primates native to the coastal forests of Kenya. Learn about conservation efforts, rehabilitation programs, and the important role these primates play in the ecosystem. The center offers educational tours led by expert conservationists.',
+    category: 'Wildlife',
+    location: 'Diani Forest',
+    imageUrl: 'https://images.pexels.com/photos/1661535/pexels-photo-1661535.jpeg',
+    phone: '+254 722 678901',
+    email: 'info@colobusconservation.org',
+    website: 'colobusconservation.org',
+    rating: 4.9,
+    reviewCount: 156,
+    priceRange: '$',
+    duration: '1.5 hours',
+    features: ['Educational Tours', 'Conservation Learning', 'Primate Viewing', 'Expert Guides', 'Photography Allowed'],
+    gallery: [
+      'https://images.pexels.com/photos/1661535/pexels-photo-1661535.jpeg',
+      'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg',
+      'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg',
+    ],
+    socialMedia: {
+      instagram: '@colobusconservation',
+      facebook: 'ColobusConservation',
+    },
+    accessibility: ['Wheelchair accessible paths', 'Audio guides available'],
+    languages: ['English', 'Swahili', 'French'],
+  },
+  'local-2': {
+    id: 'local-2',
+    title: 'Mama Ngina\'s Kitchen',
+    description: 'Home-cooked Swahili meals in a family setting',
+    fullDescription: 'Experience authentic Swahili cuisine in the warm, welcoming home of Mama Ngina, a local culinary expert who has been cooking traditional coastal dishes for over 30 years. This intimate dining experience offers a genuine taste of Kenyan hospitality, with recipes passed down through generations and ingredients sourced from local markets.',
+    category: 'Restaurant',
+    location: 'Ukunda Village',
+    imageUrl: 'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg',
+    phone: '+254 733 789012',
+    email: 'mamangina@gmail.com',
+    rating: 4.8,
+    reviewCount: 78,
+    priceRange: '$',
+    cuisine: 'Traditional Swahili',
+    dietaryOptions: ['Halal', 'Vegetarian options'],
+    reservationRequired: true,
+    averageMealPrice: '$8-15',
+    chefSpecialty: 'Coconut Fish Curry with Ugali',
+    features: ['Home Cooking', 'Family Setting', 'Traditional Recipes', 'Cultural Experience', 'Local Ingredients'],
+    gallery: [
+      'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg',
+      'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
+      'https://images.pexels.com/photos/1126728/pexels-photo-1126728.jpeg',
+    ],
+    languages: ['English', 'Swahili'],
+  },
+  'influencer-2': {
+    id: 'influencer-2',
+    title: 'Luxury Beach Glamping',
+    description: 'Glamorous camping with ocean views',
+    fullDescription: 'Experience the perfect blend of luxury and nature with our exclusive beach glamping setup. Each tent is elegantly furnished with comfortable beds, premium linens, and modern amenities while maintaining an intimate connection with the natural beauty of Diani Beach. Wake up to the sound of waves and enjoy unobstructed ocean views from your private deck.',
+    category: 'Accommodation',
+    location: 'Diani Beach',
+    imageUrl: 'https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg',
+    phone: '+254 722 890123',
+    email: 'reservations@luxuryglamping.com',
+    website: 'luxuryglamping.com',
+    rating: 4.9,
+    reviewCount: 92,
+    priceRange: '$$$',
+    checkInTime: '3:00 PM',
+    checkOutTime: '11:00 AM',
+    cancellationPolicy: 'Free cancellation up to 24 hours before check-in',
+    features: ['Ocean Views', 'Luxury Tents', 'Private Deck', 'Beach Access', 'Gourmet Breakfast'],
+    gallery: [
+      'https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg',
+      'https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg',
+      'https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg',
+    ],
+    socialMedia: {
+      instagram: '@luxuryglamping',
+      facebook: 'LuxuryBeachGlamping',
+    },
+    accessibility: ['Beach wheelchair available', 'Accessible bathroom facilities'],
+    languages: ['English', 'Swahili', 'French'],
+  },
+  // Event collection items
+  'st-1': {
+    id: 'st-1',
+    title: 'Sunset Beach Yoga',
+    description: 'Join daily yoga sessions on the pristine white sands',
+    fullDescription: 'Connect with nature and find inner peace during our sunset beach yoga sessions. Led by certified instructors, these classes are designed for all levels and take place on the soft white sands of Diani Beach. The combination of gentle ocean sounds, warm sand, and spectacular sunset views creates the perfect environment for mindfulness and relaxation.',
+    category: 'Activity',
+    location: 'Diani Beach',
+    imageUrl: 'https://images.pexels.com/photos/317157/pexels-photo-317157.jpeg',
+    phone: '+254 733 901234',
+    email: 'info@amarawellness.com',
+    website: 'amarawellness.com',
+    rating: 4.9,
+    reviewCount: 145,
+    priceRange: '$',
+    duration: '1 hour',
+    difficulty: 'Easy',
+    groupSize: 'Max 15 people',
+    equipment: ['Yoga mats', 'Blocks', 'Straps'],
+    features: ['Sunset Timing', 'Beach Setting', 'All Levels', 'Certified Instructors', 'Mindfulness Focus'],
+    gallery: [
+      'https://images.pexels.com/photos/317157/pexels-photo-317157.jpeg',
+      'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg',
+      'https://images.pexels.com/photos/1032650/pexels-photo-1032650.jpeg',
+    ],
+    socialMedia: {
+      instagram: '@amarawellness',
+      facebook: 'AmaraWellnessDiani',
+    },
+    languages: ['English', 'Swahili'],
+  },
+  'st-2': {
+    id: 'st-2',
+    title: 'Festival Food Market',
+    description: 'Taste authentic coastal cuisine from local vendors',
+    fullDescription: 'Immerse yourself in the vibrant flavors of the Kenyan coast at our special festival food market. Local vendors showcase traditional dishes, fresh seafood, tropical fruits, and artisanal products. This culinary journey offers an authentic taste of coastal culture, with recipes that have been perfected over generations.',
+    category: 'Food',
+    location: 'Diani Beach Road',
+    imageUrl: 'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
+    phone: '+254 722 012345',
+    email: 'chef@kesicuisine.com',
+    rating: 4.8,
+    reviewCount: 203,
+    priceRange: '$',
+    features: ['Local Vendors', 'Traditional Dishes', 'Fresh Seafood', 'Cultural Experience', 'Festival Atmosphere'],
+    gallery: [
+      'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
+      'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg',
+      'https://images.pexels.com/photos/1126728/pexels-photo-1126728.jpeg',
+    ],
+    socialMedia: {
+      instagram: '@chefkesi',
+      facebook: 'ChefKesiCuisine',
+    },
+    languages: ['English', 'Swahili'],
+  },
 };
 
 export default function DetailsScreen() {
@@ -336,12 +569,15 @@ export default function DetailsScreen() {
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
       case 'restaurant':
+      case 'food':
         return colors.success;
       case 'hotel':
+      case 'accommodation':
         return colors.primary;
       case 'activity':
+      case 'experience':
         return colors.warning;
-      case 'service':
+      case 'wildlife':
         return '#8B5CF6';
       default:
         return colors.accent;
@@ -391,6 +627,7 @@ export default function DetailsScreen() {
   const renderCategorySpecificContent = () => {
     switch (detailData.category.toLowerCase()) {
       case 'restaurant':
+      case 'food':
         return (
           <>
             {/* Restaurant Specific Info */}
@@ -452,6 +689,7 @@ export default function DetailsScreen() {
         );
 
       case 'hotel':
+      case 'accommodation':
         return (
           <>
             {/* Hotel Specific Info */}
@@ -532,6 +770,8 @@ export default function DetailsScreen() {
         );
 
       case 'activity':
+      case 'experience':
+      case 'wildlife':
         return (
           <>
             {/* Activity Specific Info */}
@@ -546,27 +786,31 @@ export default function DetailsScreen() {
                   </View>
                 </View>
 
-                <View style={styles.infoItem}>
-                  <View style={[styles.difficultyIcon, { backgroundColor: getDifficultyColor(detailData.difficulty || '') + '20' }]}>
-                    <Text style={[styles.difficultyText, { color: getDifficultyColor(detailData.difficulty || '') }]}>
-                      {detailData.difficulty?.charAt(0)}
-                    </Text>
+                {detailData.difficulty && (
+                  <View style={styles.infoItem}>
+                    <View style={[styles.difficultyIcon, { backgroundColor: getDifficultyColor(detailData.difficulty || '') + '20' }]}>
+                      <Text style={[styles.difficultyText, { color: getDifficultyColor(detailData.difficulty || '') }]}>
+                        {detailData.difficulty?.charAt(0)}
+                      </Text>
+                    </View>
+                    <View style={styles.infoContent}>
+                      <Text style={styles.infoLabel}>Difficulty</Text>
+                      <Text style={[styles.infoValue, { color: getDifficultyColor(detailData.difficulty || '') }]}>
+                        {detailData.difficulty}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={styles.infoContent}>
-                    <Text style={styles.infoLabel}>Difficulty</Text>
-                    <Text style={[styles.infoValue, { color: getDifficultyColor(detailData.difficulty || '') }]}>
-                      {detailData.difficulty}
-                    </Text>
-                  </View>
-                </View>
+                )}
 
-                <View style={styles.infoItem}>
-                  <Users size={20} color={colors.warning} />
-                  <View style={styles.infoContent}>
-                    <Text style={styles.infoLabel}>Group Size</Text>
-                    <Text style={styles.infoValue}>{detailData.groupSize}</Text>
+                {detailData.groupSize && (
+                  <View style={styles.infoItem}>
+                    <Users size={20} color={colors.warning} />
+                    <View style={styles.infoContent}>
+                      <Text style={styles.infoLabel}>Group Size</Text>
+                      <Text style={styles.infoValue}>{detailData.groupSize}</Text>
+                    </View>
                   </View>
-                </View>
+                )}
 
                 {detailData.seasonality && (
                   <View style={styles.infoItem}>
