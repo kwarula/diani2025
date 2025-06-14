@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MapPin, Plane, ChevronRight, Users, Home } from 'lucide-react-native';
+import { MapPin, Plane, ChevronRight, Users, Chrome as Home } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 
