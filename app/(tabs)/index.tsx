@@ -23,7 +23,7 @@ import { useSavedItems, InfoCardData } from '@/hooks/useSavedItems';
 import { useChatHistory } from '@/hooks/useChatHistory';
 
 // n8n webhook endpoint
-const WEBHOOK_URL = 'https://n8n.zaidicreatorlab.com/webhook-test/b65b3de6-506a-4c2a-86be-9bfd1c81d8ea';
+const WEBHOOK_URL = 'https://n8n.zaidicreatorlab.com/webhook/b65b3de6-506a-4c2a-86be-9bfd1c81d8ea';
 
 interface Message {
   id: string;
