@@ -229,14 +229,12 @@ export default function ChatScreen() {
           </View>
         </LinearGradient>
       </View>
-
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView
           ref={scrollViewRef}
           style={styles.messagesContainer}
           contentContainerStyle={styles.messagesContent}
           showsVerticalScrollIndicator={false}>
-          
           {messages.length === 1 && (
             <View style={styles.quickQuestionsContainer}>
               <Text style={styles.quickQuestionsTitle}>Try asking about:</Text>
@@ -260,7 +258,6 @@ export default function ChatScreen() {
               ))}
             </View>
           )}
-          
           {messages.map((message) => (
             <View key={message.id}>
               <ChatBubble message={message} />
@@ -278,7 +275,6 @@ export default function ChatScreen() {
               )}
             </View>
           ))}
-          
           {isLoadingResponse && (
             <View style={styles.typingContainer}>
               <View style={styles.typingBubble}>
@@ -291,7 +287,6 @@ export default function ChatScreen() {
             </View>
           )}
         </ScrollView>
-
         <View style={styles.inputContainer}>
           <LinearGradient
             colors={[colors.surface, colors.surfaceElevated]}
@@ -323,7 +318,6 @@ export default function ChatScreen() {
                     <Mic size={20} color={colors.textTertiary} />
                   )}
                 </TouchableOpacity>
-                
                 {inputText.trim() ? (
                   <TouchableOpacity
                     style={styles.sendButton}
@@ -345,7 +339,6 @@ export default function ChatScreen() {
           </LinearGradient>
         </View>
       </KeyboardAvoidingView>
-
       {isListening && <VoiceInputOverlay onCancel={() => setIsListening(false)} />}
     </SafeAreaView>
   );
