@@ -13,38 +13,7 @@ import {
   Platform,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import {
-  ArrowLeft,
-  Phone,
-  MapPin,
-  Globe,
-  Navigation,
-  Clock,
-  Star,
-  Bookmark,
-  Share,
-  Mail,
-  Camera,
-  Users,
-  Calendar,
-  DollarSign,
-  Wifi,
-  Car,
-  Coffee,
-  Utensils,
-  Waves,
-  TreePine,
-  Shield,
-  Award,
-  Heart,
-  MessageCircle,
-  ExternalLink,
-  Play,
-  ChevronRight,
-  Info,
-  CheckCircle,
-  AlertCircle,
-} from 'lucide-react-native';
+import { ArrowLeft, Phone, MapPin, Globe, Navigation, Clock, Star, Bookmark, Share, Mail, Camera, Users, Calendar, DollarSign, Wifi, Car, Coffee, Utensils, Waves, TreePine, Shield, Award, Heart, MessageCircle, ExternalLink, Play, ChevronRight, Info, CircleCheck as CheckCircle, CircleAlert as AlertCircle } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useSavedItems, InfoCardData } from '@/hooks/useSavedItems';
