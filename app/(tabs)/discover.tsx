@@ -21,7 +21,8 @@ import {
   Heart,
   Bookmark,
   Eye,
-  Clock
+  Clock,
+  Compass
 } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
