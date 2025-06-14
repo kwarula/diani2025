@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/contexts/AuthContext';
+import { Database } from '@/types/database';
 
 export interface InfoCardData {
   id: string;
@@ -26,86 +27,160 @@ export interface InfoCardData {
   image?: string;
 }
 
-const SAVED_ITEMS_KEY = '@discover_diani_saved_items';
+type SavedItem = Database['public']['Tables']['saved_items']['Row'];
 
 export function useSavedItems() {
+  const { user } = useAuth();
   const [savedItems, setSavedItems] = useState<InfoCardData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Memoize the loadSavedItems function to prevent infinite re-renders
+  // Convert database saved item to InfoCardData format
+  const convertToInfoCardData = (item: SavedItem): InfoCardData => {
+    return {
+      id: item.item_id,
+      title: item.title,
+      description: item.description,
+      category: item.category,
+      location: item.location || undefined,
+      imageUrl: item.image_url || undefined,
+      phone: item.phone || undefined,
+      website: item.website || undefined,
+      rating: item.rating ? Number(item.rating) : undefined,
+      price: item.price || undefined,
+      // Include any additional metadata
+      ...(item.metadata as any || {}),
+    };
+  };
+
+  // Load saved items from Supabase
   const loadSavedItems = useCallback(async () => {
+    if (!user) {
+      setSavedItems([]);
+      return;
+    }
+
     try {
-      let savedData: string | null = null;
-      
-      if (Platform.OS === 'web') {
-        savedData = localStorage.getItem(SAVED_ITEMS_KEY);
-      } else {
-        savedData = await AsyncStorage.getItem(SAVED_ITEMS_KEY);
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('saved_items')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading saved items:', error);
+        return;
       }
 
-      if (savedData) {
-        const parsedItems: InfoCardData[] = JSON.parse(savedData);
-        setSavedItems(parsedItems);
-      }
+      const convertedItems = data.map(convertToInfoCardData);
+      setSavedItems(convertedItems);
     } catch (error) {
-      console.warn('Failed to load saved items:', error);
+      console.error('Error loading saved items:', error);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [user]);
 
-  // Load saved items from storage on hook initialization
+  // Load saved items when user changes or component mounts
   useEffect(() => {
     loadSavedItems();
   }, [loadSavedItems]);
 
-  // Memoize the saveSavedItems function
-  const saveSavedItems = useCallback(async (items: InfoCardData[]) => {
+  // Toggle save item (add or remove)
+  const toggleSaveItem = useCallback(async (item: InfoCardData) => {
+    if (!user) {
+      console.warn('User must be logged in to save items');
+      return;
+    }
+
     try {
-      const dataToSave = JSON.stringify(items);
-      
-      if (Platform.OS === 'web') {
-        localStorage.setItem(SAVED_ITEMS_KEY, dataToSave);
+      const isCurrentlySaved = savedItems.some(savedItem => savedItem.id === item.id);
+
+      if (isCurrentlySaved) {
+        // Remove item
+        const { error } = await supabase
+          .from('saved_items')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('item_id', item.id);
+
+        if (error) {
+          console.error('Error removing saved item:', error);
+          return;
+        }
+
+        setSavedItems(current => current.filter(savedItem => savedItem.id !== item.id));
       } else {
-        await AsyncStorage.setItem(SAVED_ITEMS_KEY, dataToSave);
+        // Add item
+        const savedItemData = {
+          user_id: user.id,
+          item_id: item.id,
+          title: item.title,
+          description: item.description,
+          category: item.category,
+          location: item.location || null,
+          image_url: item.imageUrl || null,
+          phone: item.phone || null,
+          website: item.website || null,
+          rating: item.rating || null,
+          price: item.price || null,
+          metadata: {
+            duration: item.duration,
+            highlights: item.highlights,
+            availability: item.availability,
+            contact_phone: item.contact_phone,
+            website_url: item.website_url,
+            average_rating: item.average_rating,
+            short_description: item.short_description,
+            address: item.address,
+            name: item.name,
+            image: item.image,
+          },
+        };
+
+        const { error } = await supabase
+          .from('saved_items')
+          .insert(savedItemData);
+
+        if (error) {
+          console.error('Error saving item:', error);
+          return;
+        }
+
+        setSavedItems(current => [item, ...current]);
       }
     } catch (error) {
-      console.warn('Failed to save items:', error);
+      console.error('Error toggling saved item:', error);
     }
-  }, []);
+  }, [user, savedItems]);
 
-  // Memoize the toggleSaveItem function
-  const toggleSaveItem = useCallback(async (item: InfoCardData) => {
-    setSavedItems(currentItems => {
-      const isCurrentlySaved = currentItems.some(savedItem => savedItem.id === item.id);
-      
-      let updatedItems: InfoCardData[];
-      
-      if (isCurrentlySaved) {
-        // Remove item from saved items
-        updatedItems = currentItems.filter(savedItem => savedItem.id !== item.id);
-      } else {
-        // Add item to saved items
-        updatedItems = [...currentItems, item];
-      }
-      
-      // Save to storage asynchronously
-      saveSavedItems(updatedItems);
-      
-      return updatedItems;
-    });
-  }, [saveSavedItems]);
-
-  // Memoize the isItemSaved function
+  // Check if item is saved
   const isItemSaved = useCallback((itemId: string): boolean => {
     return savedItems.some(savedItem => savedItem.id === itemId);
   }, [savedItems]);
 
-  // Memoize the clearAllSavedItems function
+  // Clear all saved items
   const clearAllSavedItems = useCallback(async () => {
-    setSavedItems([]);
-    await saveSavedItems([]);
-  }, [saveSavedItems]);
+    if (!user) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('saved_items')
+        .delete()
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error clearing saved items:', error);
+        return;
+      }
+
+      setSavedItems([]);
+    } catch (error) {
+      console.error('Error clearing saved items:', error);
+    }
+  }, [user]);
 
   return {
     savedItems,

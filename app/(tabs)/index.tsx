@@ -18,7 +18,9 @@ import { ChatBubble } from '@/components/ChatBubble';
 import { InfoCard } from '@/components/InfoCard';
 import { VoiceInputOverlay } from '@/components/VoiceInputOverlay';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useSavedItems, InfoCardData } from '@/hooks/useSavedItems';
+import { useChatHistory } from '@/hooks/useChatHistory';
 
 // n8n webhook endpoint
 const WEBHOOK_URL = 'https://n8n.zaidicreatorlab.com/webhook-test/b65b3de6-506a-4c2a-86be-9bfd1c81d8ea';
@@ -45,11 +47,16 @@ interface WebhookResponse {
 
 export default function ChatScreen() {
   const { colors } = useTheme();
+  const { user } = useAuth();
   const { toggleSaveItem, isItemSaved } = useSavedItems();
+  const { saveMessage } = useChatHistory();
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "Jambo! Welcome to Discover Diani! 🏖️ I'm your AI guide for this coastal paradise. Ask me about the best restaurants, luxury hotels, exciting activities, or any local services you need. What would you like to explore first?",
+      text: user 
+        ? `Jambo ${user.email?.split('@')[0]}! Welcome back to Discover Diani! 🏖️ I'm your AI guide for this coastal paradise. Ask me about the best restaurants, luxury hotels, exciting activities, or any local services you need. What would you like to explore today?`
+        : "Jambo! Welcome to Discover Diani! 🏖️ I'm your AI guide for this coastal paradise. Ask me about the best restaurants, luxury hotels, exciting activities, or any local services you need. What would you like to explore first?",
       isUser: false,
       timestamp: new Date(),
     },
@@ -137,6 +144,11 @@ export default function ChatScreen() {
       setInputHeight(44);
       setIsLoadingResponse(true);
 
+      // Save user message to chat history if user is logged in
+      if (user) {
+        await saveMessage(query, true);
+      }
+
       try {
         // Make POST request to n8n webhook
         const response = await fetch(WEBHOOK_URL, {
@@ -147,6 +159,7 @@ export default function ChatScreen() {
           body: JSON.stringify({
             query: query,
             timestamp: new Date().toISOString(),
+            user_id: user?.id || 'anonymous',
           }),
         });
 
@@ -180,6 +193,11 @@ export default function ChatScreen() {
         }
 
         setMessages(prev => [...prev, aiResponse]);
+
+        // Save AI response to chat history if user is logged in
+        if (user) {
+          await saveMessage(aiResponse.text, false, webhookData.richContent);
+        }
 
       } catch (error) {
         console.error('Webhook request failed:', error);

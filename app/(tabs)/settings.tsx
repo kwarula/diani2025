@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Switch, Alert } from 'react-native';
-import { Bell, Trash2, CircleHelp as HelpCircle, Info, ChevronRight, Moon, Volume2 } from 'lucide-react-native';
+import { Bell, Trash2, CircleHelp as HelpCircle, Info, ChevronRight, Moon, Volume2, LogOut, User } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useChatHistory } from '@/hooks/useChatHistory';
 
 export default function SettingsScreen() {
   const { theme, toggleTheme, colors } = useTheme();
+  const { user, signOut } = useAuth();
+  const { clearChatHistory } = useChatHistory();
+  const router = useRouter();
+  
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
@@ -14,17 +21,41 @@ export default function SettingsScreen() {
       'Are you sure you want to clear all chat history? This action cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Clear', style: 'destructive', onPress: () => {
+        { text: 'Clear', style: 'destructive', onPress: async () => {
+          await clearChatHistory();
           Alert.alert('Success', 'Chat history has been cleared.');
         }},
       ]
     );
   };
 
+  const handleSignOut = () => {
+    Alert.alert(
+      'Sign Out',
+      'Are you sure you want to sign out?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Sign Out', style: 'destructive', onPress: async () => {
+          const { error } = await signOut();
+          if (error) {
+            Alert.alert('Error', 'Failed to sign out. Please try again.');
+          } else {
+            router.replace('/(auth)/signin');
+          }
+        }},
+      ]
+    );
+  };
+
+  const handleProfile = () => {
+    // Navigate to profile screen (to be implemented)
+    Alert.alert('Profile', 'Profile management coming soon!');
+  };
+
   const handleHelp = () => {
     Alert.alert(
       'Help & Tips',
-      'Tips for using Discover Diani:\n\n• Ask specific questions about locations\n• Use voice input for hands-free interaction\n• Try questions like "best restaurants near me"\n• Ask about activities, hotels, and local services'
+      'Tips for using Discover Diani:\n\n• Ask specific questions about locations\n• Use voice input for hands-free interaction\n• Try questions like "best restaurants near me"\n• Ask about activities, hotels, and local services\n• Save your favorite places for quick access'
     );
   };
 
@@ -45,6 +76,26 @@ export default function SettingsScreen() {
       </View>
       
       <View style={styles.content}>
+        {/* User Section */}
+        {user && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Account</Text>
+            
+            <TouchableOpacity style={styles.actionItem} onPress={handleProfile} activeOpacity={0.7}>
+              <View style={styles.actionInfo}>
+                <View style={styles.iconContainer}>
+                  <User size={20} color={colors.primary} />
+                </View>
+                <View style={styles.actionTextContainer}>
+                  <Text style={styles.actionTitle}>Profile</Text>
+                  <Text style={styles.actionSubtitle}>{user.email}</Text>
+                </View>
+              </View>
+              <ChevronRight size={20} color={colors.textTertiary} />
+            </TouchableOpacity>
+          </View>
+        )}
+
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Preferences</Text>
           
@@ -140,6 +191,44 @@ export default function SettingsScreen() {
             <ChevronRight size={20} color={colors.textTertiary} />
           </TouchableOpacity>
         </View>
+
+        {/* Sign Out Section */}
+        {user && (
+          <View style={styles.section}>
+            <TouchableOpacity style={styles.signOutItem} onPress={handleSignOut} activeOpacity={0.7}>
+              <View style={styles.actionInfo}>
+                <View style={[styles.iconContainer, { backgroundColor: '#FFEBEE' }]}>
+                  <LogOut size={20} color={colors.error} />
+                </View>
+                <Text style={[styles.actionTitle, { color: colors.error }]}>Sign Out</Text>
+              </View>
+              <ChevronRight size={20} color={colors.textTertiary} />
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* Auth Section for non-logged in users */}
+        {!user && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Account</Text>
+            
+            <TouchableOpacity 
+              style={styles.authButton} 
+              onPress={() => router.push('/(auth)/signin')}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.authButtonText}>Sign In</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.authButton, styles.signUpButton]} 
+              onPress={() => router.push('/(auth)/signup')}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.authButtonText, styles.signUpButtonText]}>Create Account</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -252,14 +341,70 @@ const createStyles = (colors: any) => StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  signOutItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: colors.surface,
+    padding: 18,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.error,
+    shadowColor: colors.error,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
   actionInfo: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  actionTextContainer: {
+    flex: 1,
   },
   actionTitle: {
     fontSize: 17,
     fontFamily: 'Roboto-Medium',
     color: colors.text,
     marginLeft: 12,
+  },
+  actionSubtitle: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
+    color: colors.textSecondary,
+    marginLeft: 12,
+    marginTop: 2,
+  },
+  authButton: {
+    backgroundColor: colors.primary,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+    alignItems: 'center',
+    marginBottom: 12,
+    shadowColor: colors.primary,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  signUpButton: {
+    backgroundColor: colors.success,
+    shadowColor: colors.success,
+  },
+  authButtonText: {
+    fontSize: 16,
+    fontFamily: 'Roboto-Bold',
+    color: '#FFFFFF',
+  },
+  signUpButtonText: {
+    color: '#FFFFFF',
   },
 });

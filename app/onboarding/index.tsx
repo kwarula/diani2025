@@ -4,11 +4,32 @@ import { useRouter } from 'expo-router';
 import { ChevronRight } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function OnboardingStart() {
   const router = useRouter();
   const { colors } = useTheme();
+  const { user } = useAuth();
   const styles = createStyles(colors);
+
+  const handleGetStarted = () => {
+    if (user) {
+      // User is already logged in, go to main app
+      router.replace('/(tabs)');
+    } else {
+      // User not logged in, continue with onboarding
+      router.push('/onboarding/welcome');
+    }
+  };
+
+  const handleSkip = () => {
+    if (user) {
+      router.replace('/(tabs)');
+    } else {
+      // Show auth options
+      router.replace('/(auth)/signin');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,7 +75,7 @@ export default function OnboardingStart() {
         <View style={styles.actions}>
           <TouchableOpacity 
             style={styles.getStartedButton}
-            onPress={() => router.push('/onboarding/welcome')}
+            onPress={handleGetStarted}
             activeOpacity={0.85}
           >
             <LinearGradient
@@ -63,17 +84,21 @@ export default function OnboardingStart() {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
-              <Text style={styles.getStartedText}>Get Started</Text>
+              <Text style={styles.getStartedText}>
+                {user ? 'Continue to App' : 'Get Started'}
+              </Text>
               <ChevronRight size={20} color="#FFFFFF" />
             </LinearGradient>
           </TouchableOpacity>
           
           <TouchableOpacity 
             style={styles.skipButton}
-            onPress={() => router.replace('/(tabs)')}
+            onPress={handleSkip}
             activeOpacity={0.7}
           >
-            <Text style={styles.skipText}>Skip Introduction</Text>
+            <Text style={styles.skipText}>
+              {user ? 'Skip Introduction' : 'Sign In Instead'}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

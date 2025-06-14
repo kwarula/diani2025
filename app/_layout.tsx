@@ -11,6 +11,7 @@ import {
 } from '@expo-google-fonts/roboto';
 import * as SplashScreen from 'expo-splash-screen';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,7 +40,9 @@ function RootLayoutContent() {
     <>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="onboarding" />
+        <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="details/[id]" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
@@ -51,7 +54,9 @@ export default function RootLayout() {
   useFrameworkReady();
   return (
     <ThemeProvider>
-      <RootLayoutContent />
+      <AuthProvider>
+        <RootLayoutContent />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
