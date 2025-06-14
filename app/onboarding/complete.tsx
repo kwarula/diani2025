@@ -9,14 +9,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { 
-  CheckCircle, 
-  Sparkles,
-  ArrowRight,
-  Heart,
-  MapPin,
-  Users
-} from 'lucide-react-native';
+import { CircleCheck as CheckCircle, Sparkles, ArrowRight, Heart, MapPin, Users } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useOnboarding } from '@/contexts/OnboardingContext';
 import { useAuth } from '@/contexts/AuthContext';
