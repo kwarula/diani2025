@@ -16,7 +16,17 @@
       "output": "single",
       "favicon": "./assets/images/logo.png"
     },
-    "plugins": ["expo-router", "expo-font", "expo-web-browser"],
+    "plugins": [
+      "expo-router", 
+      "expo-font", 
+      "expo-web-browser",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "This app uses location to provide personalized recommendations and help you find nearby attractions, restaurants, and services in Diani Beach."
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }

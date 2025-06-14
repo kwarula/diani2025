@@ -15,6 +15,7 @@ interface AuthContextType {
   signOut: () => Promise<{ error: AuthError | null }>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: Error | null }>;
   refreshProfile: () => Promise<void>;
+  completeOnboarding: (onboardingData: any) => Promise<{ error: Error | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -149,6 +150,48 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  const completeOnboarding = async (onboardingData: any) => {
+    if (!user) {
+      return { error: new Error('No user logged in') };
+    }
+
+    try {
+      const profileUpdates = {
+        full_name: onboardingData.fullName,
+        onboarding_completed: true,
+        user_type: onboardingData.userType,
+        country_of_origin: onboardingData.countryOfOrigin,
+        duration_of_stay: onboardingData.durationOfStay,
+        duration_unit: onboardingData.durationUnit,
+        preferred_language: onboardingData.preferredLanguage,
+        location_permission_granted: onboardingData.locationPermissionGranted,
+        current_location: onboardingData.currentLocation,
+        interests: onboardingData.interests,
+        accommodation_preferences: onboardingData.accommodationPreferences,
+        activity_preferences: onboardingData.activityPreferences,
+        food_preferences: onboardingData.foodPreferences,
+        budget_range: onboardingData.budgetRange,
+        travel_style: onboardingData.travelStyle,
+        onboarding_completed_at: new Date().toISOString(),
+      };
+
+      const { error } = await supabase
+        .from('profiles')
+        .update(profileUpdates)
+        .eq('id', user.id);
+
+      if (error) {
+        return { error: new Error(error.message) };
+      }
+
+      // Refresh profile data
+      await loadProfile(user.id);
+      return { error: null };
+    } catch (error) {
+      return { error: error as Error };
+    }
+  };
+
   const refreshProfile = async () => {
     if (user) {
       await loadProfile(user.id);
@@ -165,6 +208,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     signOut,
     updateProfile,
     refreshProfile,
+    completeOnboarding,
   };
 
   return (

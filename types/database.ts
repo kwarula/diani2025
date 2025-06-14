@@ -10,6 +10,22 @@ export interface Database {
           preferences: Json | null;
           created_at: string;
           updated_at: string;
+          // Onboarding fields
+          onboarding_completed: boolean;
+          user_type: 'local' | 'tourist' | null;
+          country_of_origin: string | null;
+          duration_of_stay: string | null;
+          duration_unit: 'days' | 'weeks' | 'months' | null;
+          preferred_language: string;
+          location_permission_granted: boolean;
+          current_location: Json | null;
+          interests: Json;
+          accommodation_preferences: Json;
+          activity_preferences: Json;
+          food_preferences: Json;
+          budget_range: string | null;
+          travel_style: Json;
+          onboarding_completed_at: string | null;
         };
         Insert: {
           id: string;
@@ -19,6 +35,21 @@ export interface Database {
           preferences?: Json | null;
           created_at?: string;
           updated_at?: string;
+          onboarding_completed?: boolean;
+          user_type?: 'local' | 'tourist' | null;
+          country_of_origin?: string | null;
+          duration_of_stay?: string | null;
+          duration_unit?: 'days' | 'weeks' | 'months' | null;
+          preferred_language?: string;
+          location_permission_granted?: boolean;
+          current_location?: Json | null;
+          interests?: Json;
+          accommodation_preferences?: Json;
+          activity_preferences?: Json;
+          food_preferences?: Json;
+          budget_range?: string | null;
+          travel_style?: Json;
+          onboarding_completed_at?: string | null;
         };
         Update: {
           id?: string;
@@ -28,6 +59,21 @@ export interface Database {
           preferences?: Json | null;
           created_at?: string;
           updated_at?: string;
+          onboarding_completed?: boolean;
+          user_type?: 'local' | 'tourist' | null;
+          country_of_origin?: string | null;
+          duration_of_stay?: string | null;
+          duration_unit?: 'days' | 'weeks' | 'months' | null;
+          preferred_language?: string;
+          location_permission_granted?: boolean;
+          current_location?: Json | null;
+          interests?: Json;
+          accommodation_preferences?: Json;
+          activity_preferences?: Json;
+          food_preferences?: Json;
+          budget_range?: string | null;
+          travel_style?: Json;
+          onboarding_completed_at?: string | null;
         };
       };
       saved_items: {

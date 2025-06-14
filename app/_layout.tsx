@@ -12,6 +12,7 @@ import {
 import * as SplashScreen from 'expo-splash-screen';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { OnboardingProvider } from '@/contexts/OnboardingContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -55,7 +56,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <RootLayoutContent />
+        <OnboardingProvider>
+          <RootLayoutContent />
+        </OnboardingProvider>
       </AuthProvider>
     </ThemeProvider>
   );
