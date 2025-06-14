@@ -71,6 +71,37 @@ export default function ChatScreen() {
     }, 100);
   };
 
+  // Function to format location data into a string
+  const formatLocation = (location: any): string => {
+    if (!location) return '';
+    
+    if (typeof location === 'string') {
+      return location;
+    }
+    
+    if (typeof location === 'object') {
+      // Handle coordinate objects
+      if (location.lat && location.lng) {
+        return `${location.lat}, ${location.lng}`;
+      }
+      
+      // Handle address objects
+      if (location.address) {
+        return location.address;
+      }
+      
+      // Handle other object formats
+      if (location.name || location.description) {
+        return location.name || location.description;
+      }
+      
+      // Fallback for unknown object structure
+      return JSON.stringify(location);
+    }
+    
+    return String(location);
+  };
+
   // Function to map webhook response data to InfoCardData
   const mapToInfoCardData = (item: any, index: number): InfoCardData => {
     return {
@@ -78,7 +109,7 @@ export default function ChatScreen() {
       title: item.name || item.title || 'Unknown',
       description: item.short_description || item.category || item.description || '',
       category: item.category || 'General',
-      location: item.address || item.location || '',
+      location: formatLocation(item.address || item.location),
       imageUrl: item.image || item.imageUrl || '',
       phone: item.contact_phone || item.phone || '',
       website: item.website_url || item.website || '',
