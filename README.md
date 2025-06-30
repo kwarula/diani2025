@@ -1,4 +1,4 @@
-# Discover Diani Mobile App (diani2025)
+# Discover Diani Mobile App
 
 Discover Diani is a mobile application built with Expo (React Native) that helps users explore attractions, restaurants, and services in Diani Beach. It uses Supabase for backend services.
 
